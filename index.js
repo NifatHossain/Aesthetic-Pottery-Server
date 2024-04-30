@@ -29,6 +29,7 @@ async function run() {
     // await client.connect();
     const database = client.db("craftsDB");
     const craftCollection = database.collection("craftCollection");
+    const categoriesCollection = database.collection("categoriesCollection");
     app.post('/addcrafts',async(req,res)=>{
         const craft= req.body
         console.log(craft)
@@ -81,6 +82,18 @@ async function run() {
         const query = { _id: new ObjectId(gotId) };
         const result = await craftCollection.deleteOne(query);
         res.send(result)
+    })
+    app.get('/categories',async(req,res)=>{
+        const cursor = categoriesCollection.find();
+        const result= await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/categories/:name',async(req,res)=>{
+        const receivedName=  req.params.name;
+        const query= {sCategory: receivedName};
+        const cursor= craftCollection.find(query);
+        const result= await cursor.toArray()
+        res.send(result);
     })
     
     // Send a ping to confirm a successful connection
