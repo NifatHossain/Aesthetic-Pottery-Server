@@ -54,6 +54,28 @@ async function run() {
         res.send(result);
 
     })
+    app.patch('/updateitem/:id', async(req,res)=>{
+        const receivedId= req.params.id
+        const filter = { _id:new ObjectId(receivedId) };
+        const updateDoc = {
+            $set: {
+                name:req.body.name,
+                image :req.body.image, 
+                price :req.body.price,
+                rating :req.body.rating, 
+                description :req.body.description, 
+                processTime :req.body.processTime, 
+                stock :req.body.stock, 
+                sCategory :req.body.sCategory, 
+                customOption :req.body.customOption,
+                email :req.body.email, 
+                userName :req.body.userName
+            },
+          };
+          const result = await craftCollection.updateOne(filter, updateDoc);
+          res.send(result);
+
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
